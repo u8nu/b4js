@@ -1,0 +1,86 @@
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'maven-publish'
+apply plugin: 'war' // for providedCompile
+apply plugin: 'com.github.ben-manes.versions'
+
+description = 'b4js is a binary extension for JSON format'
+version = '1.0.0-snapshot'
+
+compileJava {
+  sourceCompatibility = 8
+  targetCompatibility = 8
+  println sourceCompatibility
+}
+
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath  'com.github.ben-manes:gradle-versions-plugin:0.11.3'
+  }
+}
+
+sourceSets {
+  main {
+    java {
+      srcDir 'src'
+    }
+    resources {
+      srcDir 'res'
+    }
+  }
+  test {
+    java {
+      srcDir 'test-src'
+    }
+    groovy {
+      srcDir 'test-src'
+    }
+    resources {
+      srcDir 'test-res'
+    }
+  }
+}
+
+repositories {
+  jcenter()
+  //mavenCentral()
+}
+
+task javadocJar(type: Jar, dependsOn: groovydoc) {
+  from "${buildDir}/javadoc"
+}
+task sourcesJar(type: Jar) {
+  from sourceSets.main.allSource
+}
+
+dependencies {
+  compile 'io.netty:netty-buffer:4.0.33.Final'
+  compile 'org.slf4j:slf4j-api:1.7.13'
+  testCompile 'ch.qos.logback:logback-classic:1.1.3'
+  providedCompile 'org.projectlombok:lombok:1.16.6'
+  testCompile 'org.codehaus.groovy:groovy-all:2.4.1'
+  testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+  testRuntime 'cglib:cglib-nodep:3.1'
+  testRuntime 'org.objenesis:objenesis:2.1'
+}
+
+//publishing {
+//  publications {
+//    jar(MavenPlublication) {
+//      groupId 'nu.u8'
+//      artifactId 'b4js'
+//      version '1.0.0-snapshot'
+//      //from components.java
+//      //artifact sourceJar {
+//      //  classifier 'sources'
+//      //}
+//      //artifact javadocJar {
+//      //  classifier 'javadoc'
+//      //}
+//    }
+//  }
+//}
+//
